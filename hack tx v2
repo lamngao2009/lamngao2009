@@ -1,0 +1,32 @@
+'use client'
+
+import React, { useState } from 'react';
+
+export default function Home() {
+  const [ketQua, setKetQua] = useState<string[]>([]);
+
+  const randomTaiXiu = () => {
+    const x = Math.random() < 0.5 ? 'T' : 'X';
+    setKetQua(prev => [...prev.slice(-19), x]); // giữ tối đa 20 kết quả
+  };
+
+  const tong = ketQua.length;
+  const soTai = ketQua.filter(k => k === 'T').length;
+  const soXiu = ketQua.filter(k => k === 'X').length;
+  const tileTai = tong ? ((soTai / tong) * 100).toFixed(1) : 0;
+  const tileXiu = tong ? ((soXiu / tong) * 100).toFixed(1) : 0;
+
+  let count = 1, maxRepeat = 1;
+  for (let i = 1; i < ketQua.length; i++) {
+    if (ketQua[i] === ketQua[i-1]) {
+      count++;
+      if (count > maxRepeat) maxRepeat = count;
+    } else {
+      count = 1;
+    }
+  }
+
+  function duDoanTX(kq: string[]) {
+    const len = kq.length;
+    if (len >= 3 && kq[len-1] === kq[len-2] && kq[len-2] === kq[len-3]) {
+      return kq[len-1] === 'T' ? 'X' : 'T
